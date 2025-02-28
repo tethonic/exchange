@@ -1,27 +1,17 @@
 import { useState } from 'react';
 
 const OMR_TO_USD = 2.6;
-const FEE_PERCENTAGE = 0.02; // 2% fee
+const FEE_PERCENTAGE = 0.04;
 
 const calculateExchange = (amount: number, isOmrToUsdt: boolean) => {
-  if (amount <= 0) return { output: 0, fee: 0 };
+  if (amount <= 0) return { output: 0 };
   
   if (isOmrToUsdt) {
-    // OMR to USDT
     const rawUsdt = amount * OMR_TO_USD;
-    const fee = rawUsdt * FEE_PERCENTAGE;
-    return {
-      output: rawUsdt - fee,
-      fee: fee
-    };
+    return { output: rawUsdt * (1 - FEE_PERCENTAGE) };
   } else {
-    // USDT to OMR
     const rawOmr = amount / OMR_TO_USD;
-    const fee = rawOmr * FEE_PERCENTAGE;
-    return {
-      output: rawOmr - fee,
-      fee: fee
-    };
+    return { output: rawOmr * (1 - FEE_PERCENTAGE) };
   }
 };
 
@@ -37,16 +27,10 @@ const CalculatorSection = ({ type, inputAmount, onInputChange }: CalculatorSecti
 
   return (
     <div className="bg-gray-800/90 p-6 rounded-lg border border-gray-700/50">
-      <div className="flex flex-col gap-2 mb-6">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold">
-            {isOmrToUsdt ? 'Convert OMR to USDT' : 'Convert USDT to OMR'}
-          </h3>
-        </div>
-        <div className="text-sm text-gray-400 space-y-1">
-          <div>Base Rate: 1 OMR = ${OMR_TO_USD} USDT</div>
-          <div>Exchange Fee: 2%</div>
-        </div>
+      <div className="mb-6">
+        <h3 className="text-lg font-bold">
+          {isOmrToUsdt ? 'Convert OMR to USDT' : 'Convert USDT to OMR'}
+        </h3>
       </div>
 
       <div className="space-y-6">
@@ -70,20 +54,8 @@ const CalculatorSection = ({ type, inputAmount, onInputChange }: CalculatorSecti
         </div>
 
         {parseFloat(inputAmount) > 0 && (
-          <div className="bg-gray-900/50 p-4 rounded-lg space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-400">You Send</span>
-              <span>
-                {parseFloat(inputAmount).toFixed(3)} {isOmrToUsdt ? 'OMR' : 'USDT'}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Exchange Fee (2%)</span>
-              <span className="text-yellow-500">
-                {details.fee.toFixed(3)} {isOmrToUsdt ? 'USDT' : 'OMR'}
-              </span>
-            </div>
-            <div className="flex justify-between text-base font-medium pt-2 border-t border-gray-700">
+          <div className="bg-gray-900/50 p-4 rounded-lg">
+            <div className="flex justify-between text-base font-medium">
               <span className="text-gray-300">You Receive</span>
               <span className="text-green-500">
                 {details.output.toFixed(3)} {isOmrToUsdt ? 'USDT' : 'OMR'}
