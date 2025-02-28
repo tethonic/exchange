@@ -1,5 +1,6 @@
 import './App.css'
 import { CryptoTracker } from './components/CryptoTracker';
+import { CurrencyCalculator } from './components/CurrencyCalculator';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
           Tethonic Crypto Tracker
         </h1>
         <CryptoTracker />
+        <CurrencyCalculator />
       </div>
     </div>
   );
