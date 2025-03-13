@@ -18,6 +18,7 @@ export const CurrencySelect = ({ selectedCurrency, onCurrencyChange }: CurrencyS
   return (
     <div className="mb-6 flex justify-end">
       <select
+        aria-label="Select currency"
         value={selectedCurrency.code}
         onChange={(e) => {
           const currency = FIAT_CURRENCIES.find(c => c.code === e.target.value);
